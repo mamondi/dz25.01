@@ -9,7 +9,7 @@
     <ClCompile Include="app.cpp">
       <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="class.cpp">
+    <ClCompile Include="class.h">
       <Filter>App</Filter>
     </ClCompile>
   </ItemGroup>
