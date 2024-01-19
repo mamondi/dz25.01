@@ -7,7 +7,15 @@ class PriorityQueue {
 public:
     PriorityQueue() : m_size(0) {}
 
-    ~PriorityQueue() {}
+    ~PriorityQueue() {
+
+        Node* current = m_head;
+        while (current != nullptr) {
+            Node* next = current->next;
+            delete current;
+            current = next;
+        }
+    }
 
     bool IsEmpty() const { return m_size == 0; }
 
@@ -20,9 +28,25 @@ public:
             m_head = m_tail = node;
         }
         else {
-           
-            m_tail->next = node;
-            m_tail = node;
+            Node* current = m_head;
+            Node* previous = nullptr;
+            while (current != nullptr && current->priority < priority) {
+                previous = current;
+                current = current->next;
+            }
+
+            if (previous == nullptr) {
+                node->next = m_head;
+                m_head = node;
+            }
+            else {
+                node->next = current;
+                previous->next = node;
+            }
+
+            if (current == nullptr) {
+                m_tail = node;
+            }
         }
 
         ++m_size;
@@ -33,9 +57,7 @@ public:
             throw std::underflow_error("Queue is empty");
         }
 
-      
         T value = m_head->value;
-
         Node* old_head = m_head;
         m_head = m_head->next;
         delete old_head;
@@ -60,7 +82,8 @@ public:
     }
 
 private:
-    struct Node {
+    class Node {
+    public:
         T value;
         int priority;
         Node* next;
